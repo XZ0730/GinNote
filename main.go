@@ -46,5 +46,5 @@ func main() {
 	defer Model.Db1.Close()
 	Model.Db1.AutoMigrate(&Model.User{}, &Model.Note{})
 	engine := router.Router()
-	engine.Run(":8880")
+	engine.Run(":8080")
 }
