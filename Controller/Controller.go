@@ -82,6 +82,7 @@ func Register(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": 401,
 			"err":    err,
+			"msg":    err,
 		})
 		return
 	}
