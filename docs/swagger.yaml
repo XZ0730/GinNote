@@ -48,7 +48,7 @@ definitions:
         description: 状态码
         type: integer
     type: object
-host: http://127.0.0.1:8880/swagger/index.html
+host: 127.0.0.1:8880
 info:
   contact:
     email: support@swagger.io
@@ -139,16 +139,43 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{object} ResponseMessage'
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
         "500":
-          description: '{object} ResponseMessage'
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
       summary: 删除所有/已完成/未完成记录
     get:
+      consumes:
+      - application/json
+      description: 查询记录
+      parameters:
+      - description: 完成状态
+        in: query
+        name: status
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: Bearer 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
       responses:
         "200":
-          description: '{object} ResponseMessage'
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
         "500":
-          description: '{object} ResponseMessage'
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
+      summary: 查询所有记录/所有未完成/所有已完成记录
     post:
       consumes:
       - application/json
@@ -172,9 +199,13 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{object} ResponseMessage'
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
         "500":
-          description: '{object} ResponseMessage'
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
       summary: 添加一条记录
     put:
       consumes:
@@ -193,9 +224,13 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{object} ResponseMessage'
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
         "500":
-          description: '{object} ResponseMessage'
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
       summary: 更新所有未完成或已完成记录的完成状态
   /todo/{title}:
     delete:
@@ -216,9 +251,13 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{object} ResponseMessage'
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
         "500":
-          description: '{object} ResponseMessage'
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
       summary: 删除一条记录
     get:
       consumes:
@@ -238,9 +277,13 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{object} ResponseMessage'
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
         "500":
-          description: '{object} ResponseMessage'
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
       summary: 查询一条记录
     put:
       consumes:
@@ -248,7 +291,7 @@ paths:
       description: 更新一条标题为title的记录，状态改为status
       parameters:
       - description: 修改状态
-        in: path
+        in: query
         name: status
         required: true
         type: integer
@@ -265,8 +308,12 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{object} ResponseMessage'
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
         "500":
-          description: '{object} ResponseMessage'
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseMessage'
       summary: 更新一条记录
 swagger: "2.0"

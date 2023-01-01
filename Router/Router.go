@@ -30,7 +30,7 @@ func Router() *gin.Engine {
 		//查看所有/已完成/未完成事务
 		Apigroup.GET("/todo", Util.CheckToken, Controller.GetAll)
 		//将一条/事务设置为待办或者已完成
-		Apigroup.PUT("/todo/:status/:title", Util.CheckToken, Controller.UpdateByOneKey)
+		Apigroup.PUT("/todo/:title", Util.CheckToken, Controller.UpdateByOneKey)
 		//将所有事务设置为代办或者已完成
 		Apigroup.PUT("/todo", Util.CheckToken, Controller.UpdateAll)
 		//删除一条事务

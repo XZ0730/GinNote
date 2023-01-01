@@ -115,12 +115,46 @@ const docTemplate = `{
         },
         "/todo": {
             "get": {
+                "description": "查询记录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "查询所有记录/所有未完成/所有已完成记录",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "完成状态",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "{object} ResponseMessage"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     },
                     "500": {
-                        "description": "{object} ResponseMessage"
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     }
                 }
             },
@@ -149,10 +183,16 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{object} ResponseMessage"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     },
                     "500": {
-                        "description": "{object} ResponseMessage"
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     }
                 }
             },
@@ -191,10 +231,16 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{object} ResponseMessage"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     },
                     "500": {
-                        "description": "{object} ResponseMessage"
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     }
                 }
             },
@@ -223,10 +269,16 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{object} ResponseMessage"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     },
                     "500": {
-                        "description": "{object} ResponseMessage"
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     }
                 }
             }
@@ -258,10 +310,16 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{object} ResponseMessage"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     },
                     "500": {
-                        "description": "{object} ResponseMessage"
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     }
                 }
             },
@@ -279,7 +337,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "修改状态",
                         "name": "status",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -298,10 +356,16 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{object} ResponseMessage"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     },
                     "500": {
-                        "description": "{object} ResponseMessage"
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     }
                 }
             },
@@ -331,10 +395,16 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{object} ResponseMessage"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     },
                     "500": {
-                        "description": "{object} ResponseMessage"
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseMessage"
+                        }
                     }
                 }
             }
@@ -418,7 +488,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "http://127.0.0.1:8880/swagger/index.html",
+	Host:             "127.0.0.1:8880",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Go-NOTE",

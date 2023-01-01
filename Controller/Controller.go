@@ -131,11 +131,11 @@ func Register(ctx *gin.Context) {
 //	@Summary		添加一条记录
 //	@Accept			application/json
 //	@Produce		application/json
-//	@Param			title			body	string	false	"标题"
-//	@Param			content			body	string	false	"内容"
-//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
-//	@Success		200				"{object} ResponseMessage"
-//	@Failure		500				"{object} ResponseMessage"
+//	@Param			title			body		string	false	"标题"
+//	@Param			content			body		string	false	"内容"
+//	@Param			Authorization	header		string	false	"Bearer 用户令牌"
+//	@Success		200				{object}	Model.ResponseMessage
+//	@Failure		500				{object}	Model.ResponseMessage
 //	@Router			/todo [POST]
 func Add(ctx *gin.Context) {
 	var note *Model.Note
@@ -168,10 +168,10 @@ func Add(ctx *gin.Context) {
 //	@Summary		查询一条记录
 //	@Accept			application/json
 //	@Produce		application/json
-//	@Param			title			path	string	true	"标题"
-//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
-//	@Success		200				"{object} ResponseMessage"
-//	@Failure		500				"{object} ResponseMessage"
+//	@Param			title			path		string	true	"标题"
+//	@Param			Authorization	header		string	false	"Bearer 用户令牌"
+//	@Success		200				{object}	Model.ResponseMessage
+//	@Failure		500				{object}	Model.ResponseMessage
 //	@Router			/todo/{title} [GET]
 func GetByKey(ctx *gin.Context) {
 	var note1 []*Model.Note
@@ -210,13 +210,12 @@ func GetByKey(ctx *gin.Context) {
 //	@Summary		查询所有记录/所有未完成/所有已完成记录
 //	@Accept			application/json
 //	@Produce		application/json
-//	@Param			status			query	int		false	"完成状态"
-//	@Param			page			query	int		false	"页码"
-//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
-
-// @Success		200				"{object} ResponseMessage"
-// @Failure		500				"{object} ResponseMessage"
-// @Router			/todo [GET]
+//	@Param			status			query		int		false	"完成状态"
+//	@Param			page			query		int		false	"页码"
+//	@Param			Authorization	header		string	false	"Bearer 用户令牌"
+//	@Success		200				{object}	Model.ResponseMessage
+//	@Failure		500				{object}	Model.ResponseMessage
+//	@Router			/todo [GET]
 func GetAll(ctx *gin.Context) {
 	var note2 []*Model.Note
 	var data Model.Data
@@ -278,11 +277,11 @@ func GetAll(ctx *gin.Context) {
 //	@Summary		更新一条记录
 //	@Accept			application/json
 //	@Produce		application/json
-//	@Param			status			path	int		true	"修改状态"
-//	@Param			title			path	string	true	"被更新记录的标题"
-//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
-//	@Success		200				"{object} ResponseMessage"
-//	@Failure		500				"{object} ResponseMessage"
+//	@Param			status			query		int		true	"修改状态"
+//	@Param			title			path		string	true	"被更新记录的标题"
+//	@Param			Authorization	header		string	false	"Bearer 用户令牌"
+//	@Success		200				{object}	Model.ResponseMessage
+//	@Failure		500				{object}	Model.ResponseMessage
 //	@Router			/todo/{title} [PUT]
 func UpdateByOneKey(ctx *gin.Context) {
 	var note3 *Model.Note
@@ -342,10 +341,10 @@ func UpdateByOneKey(ctx *gin.Context) {
 //	@Summary		更新所有未完成或已完成记录的完成状态
 //	@Accept			application/json
 //	@Produce		application/json
-//	@Param			status			query	int		false	"完成状态"
-//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
-//	@Success		200				"{object} ResponseMessage"
-//	@Failure		500				"{object} ResponseMessage"
+//	@Param			status			query		int		false	"完成状态"
+//	@Param			Authorization	header		string	false	"Bearer 用户令牌"
+//	@Success		200				{object}	Model.ResponseMessage
+//	@Failure		500				{object}	Model.ResponseMessage
 //	@Router			/todo [PUT]
 func UpdateAll(ctx *gin.Context) {
 	var note3 []*Model.Note
@@ -408,10 +407,10 @@ func UpdateAll(ctx *gin.Context) {
 //	@Summary		删除一条记录
 //	@Accept			application/json
 //	@Produce		application/json
-//	@Param			title			path	string	true	"被删除记录的标题"
-//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
-//	@Success		200				"{object} ResponseMessage"
-//	@Failure		500				"{object} ResponseMessage"
+//	@Param			title			path		string	true	"被删除记录的标题"
+//	@Param			Authorization	header		string	false	"Bearer 用户令牌"
+//	@Success		200				{object}	Model.ResponseMessage
+//	@Failure		500				{object}	Model.ResponseMessage
 //	@Router			/todo/{title} [DELETE]
 func DeleteByKey(ctx *gin.Context) {
 	var note4 *Model.Note
@@ -454,10 +453,10 @@ func DeleteByKey(ctx *gin.Context) {
 //	@Summary		删除所有/已完成/未完成记录
 //	@Accept			application/json
 //	@Produce		application/json
-//	@Param			status			query	int		false	"完成状态"
-//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
-//	@Success		200				"{object} ResponseMessage"
-//	@Failure		500				"{object} ResponseMessage"
+//	@Param			status			query		int		false	"完成状态"
+//	@Param			Authorization	header		string	false	"Bearer 用户令牌"
+//	@Success		200				{object}	Model.ResponseMessage
+//	@Failure		500				{object}	Model.ResponseMessage
 //	@Router			/todo [DELETE]
 func DeleteAll(ctx *gin.Context) {
 	var note5 []*Model.Note
