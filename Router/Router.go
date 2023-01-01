@@ -1,19 +1,20 @@
 package router
 
 import (
-	Controller "gin01/Controller"
-	Util "gin01/Util"
+	Controller "NoteGin/Controller"
+	Util "NoteGin/Util"
+
+	_ "NoteGin/docs"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/go-programming-tour-book/blog-service/docs"
-	// swaggerFiles "github.com/swaggo/files"
-	// ginSwagger "github.com/swaggo/gin-swagger"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func Router() *gin.Engine {
 	engine := gin.Default()
 	engine.NoRoute(Controller.NoRoute_redirect)
-	// engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	Apigroup := engine.Group("/api/v1")
 	{
 		//登录请求
@@ -21,6 +22,7 @@ func Router() *gin.Engine {
 		//注册请求
 		Apigroup.POST("/register", Controller.Register)
 		//添加一条事务
+
 		//检测token
 		Apigroup.POST("/todo", Util.CheckToken, Controller.Add)
 		//查看一条事务

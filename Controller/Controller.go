@@ -1,8 +1,7 @@
 package controller
 
 import (
-	"fmt"
-	Model "gin01/Models"
+	Model "NoteGin/Models"
 	"net/http"
 	"strconv"
 	"time"
@@ -17,23 +16,22 @@ func NoRoute_redirect(ctx *gin.Context) {
 }
 
 // Login
-// @Description 登录
-// @Summary 登录并返回token
-// @Accept application/json
-// @Produce application/json
-// @Param username formData string true "用户名"
-// @Param password formData string true "密码"
-// @Success 200 {object} ResponseMessage
-// @Failure 500 {object} ResponseMessage
-// @Router /login [POST]
-
+//
+//	@Description	登录
+//	@Summary		登录并返回token
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			username	formData	string	true	"用户名"
+//	@Param			password	formData	string	true	"密码"
+//	@Success		200			"{object}	Model.ResponseMessage"
+//	@Failure		500			{object}	Model.ResponseMessage
+//	@Router			/login [POST]
 func Login(ctx *gin.Context) {
 	//接收前端传送的用户名和密码 json形式
 	var user Model.User
 	var user1 Model.User
 	ctx.ShouldBind(&user)
 	//从请求中把数据拿出来					//准备编写bcrpt加密 进行验证
-	fmt.Println(user)
 	d := Model.Db1.Where("username=?", user.Username).First(&user1)
 	if d.RowsAffected == 0 {
 		ctx.JSON(http.StatusOK, gin.H{
@@ -49,7 +47,7 @@ func Login(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": 401,
-			"err":    err,
+			"err":    "密码错误",
 			"msg":    "密码错误",
 		})
 
@@ -66,30 +64,34 @@ func Login(ctx *gin.Context) {
 }
 
 // Register
-// @Description 注册
-// @Summary 注册用户名和密码
-// @Accept application/json
-// @Produce application/json
-// @Param username application/json string true "用户名"
-// @Param password application/json string true "密码"
-// @Param email application/json string true "邮箱"
-// @Success 200 {object} ResponseMessage
-// @Failure 500 {object} ResponseMessage
-// @Router /register [POST]
+//
+//	@Description	注册
+//	@Summary		注册用户名和密码
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			username	formData	string	true	"用户名"
+//	@Param			password	formData	string	true	"密码"
+//	@Param			email		formData	string	true	"邮箱"
+//	@Success		200			{object}	Model.ResponseMessage
+//	@Failure		500			{object}	Model.ResponseMessage
+//	@Router			/register [POST]
 func Register(ctx *gin.Context) {
 	var user Model.User
 	if err := ctx.BindJSON(&user); err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": 401,
-			"err":    err,
-			"msg":    err,
+			"data":   Model.Data{},
+			"err":    "err",
+			"msg":    "err",
 		})
 		return
 	}
 	if user.Email == "" || user.Password == "" || user.Username == "" {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": 401,
-			"msg":    "全部都要填哦",
+			"data":   Model.Data{},
+			"err":    "不能为空",
+			"msg":    "不能为空",
 		})
 		ctx.Redirect(http.StatusMovedPermanently, "http://localhost:8080/api/v1/register")
 		return
@@ -99,7 +101,8 @@ func Register(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": 500,
-			"err":    err,
+			"data":   Model.Data{},
+			"err":    "生成密文错误",
 			"msg":    "生成密文错误",
 		})
 		return
@@ -108,36 +111,42 @@ func Register(ctx *gin.Context) {
 	if err := Model.Db1.Create(&user).Error; err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": 500,
+			"data":   Model.Data{},
 			"msg":    "注册错误",
-			"err":    err,
+			"err":    "注册错误",
 		})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": http.StatusOK,
+		"data":   Model.Data{},
+		"err":    "",
 		"msg":    "注册成功",
 	})
 }
 
 // Add
-// @Description 添加记录
-// @Summary 添加一条记录
-// @Accept application/json
-// @Produce application/json
-// @Param title json string false "标题"
-// @Param content json string false "内容"
-// @Param Authorization header string false "Bearer 用户令牌"
-// @Success 200 {object} ResponseMessage
-// @Failure 500 {object} ResponseMessage
-// @Router /todo [POST]
+//
+//	@Description	添加记录
+//	@Summary		添加一条记录
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			title			body	string	false	"标题"
+//	@Param			content			body	string	false	"内容"
+//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
+//	@Success		200				"{object} ResponseMessage"
+//	@Failure		500				"{object} ResponseMessage"
+//	@Router			/todo [POST]
 func Add(ctx *gin.Context) {
-	var note Model.Note
+	var note *Model.Note
 	var data Model.Data
 	err := ctx.BindJSON(&note)
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": 402,
+			"data":   data,
 			"msg":    "json绑定失败",
+			"err":    "json绑定失败",
 		})
 	}
 	note.Create_time = time.Now().Unix()
@@ -149,22 +158,23 @@ func Add(ctx *gin.Context) {
 		"status": http.StatusOK,
 		"data":   data,
 		"msg":    "添加成功",
-		"error":  "",
+		"err":    "",
 	})
 }
 
 // GetByKey
-// @Description 查询关键词为title的记录
-// @Summary 查询一条记录
-// @Accept path
-// @Produce application/json
-// @Param title path string true "标题"
-// @Param Authorization header string false "Bearer 用户令牌"
-// @Success 200 {object} ResponseMessage
-// @Failure 500 {object} ResponseMessage
-// @Router /todo/{title} [GET]
+//
+//	@Description	查询关键词为title的记录
+//	@Summary		查询一条记录
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			title			path	string	true	"标题"
+//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
+//	@Success		200				"{object} ResponseMessage"
+//	@Failure		500				"{object} ResponseMessage"
+//	@Router			/todo/{title} [GET]
 func GetByKey(ctx *gin.Context) {
-	var note1 []Model.Note
+	var note1 []*Model.Note
 	var page int
 	title1 := ctx.Param("title")
 	title := "%" + title1 + "%"
@@ -195,18 +205,20 @@ func GetByKey(ctx *gin.Context) {
 }
 
 // GetAll
-// @Description 查询记录
-// @Summary 查询所有记录/所有未完成/所有已完成记录
-// @Accept query
-// @Produce application/json
-// @Param status query int false "完成状态"
-// @Param page query int false "页码"
-// @Param Authorization header string false "Bearer 用户令牌"
-// @Success 200 {object} ResponseMessage
-// @Failure 500 {object} ResponseMessage
-// @Router /todo [GET]
+//
+//	@Description	查询记录
+//	@Summary		查询所有记录/所有未完成/所有已完成记录
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			status			query	int		false	"完成状态"
+//	@Param			page			query	int		false	"页码"
+//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
+
+// @Success		200				"{object} ResponseMessage"
+// @Failure		500				"{object} ResponseMessage"
+// @Router			/todo [GET]
 func GetAll(ctx *gin.Context) {
-	var note2 []Model.Note
+	var note2 []*Model.Note
 	var data Model.Data
 	var page int
 	var status1 int
@@ -245,7 +257,7 @@ func GetAll(ctx *gin.Context) {
 				"status": 500,
 				"data":   Model.Data{},
 				"msg":    "查询错误",
-				"error":  d.Error,
+				"err":    "查询错误",
 			})
 			return
 		}
@@ -255,28 +267,37 @@ func GetAll(ctx *gin.Context) {
 			"status": http.StatusOK,
 			"data":   data,
 			"msg":    "ok",
-			"error":  "",
+			"err":    "",
 		})
 	}
 }
 
 // UpdateByOneKey
-// @Description 更新一条标题为title的记录，状态改为status
-// @Summary 更新一条记录
-// @Accept path
-// @Produce json
-// @Param status path int true "修改状态"
-// @Param title path string true "被更新记录的标题"
-// @Param Authorization header string false "Bearer 用户令牌"
-// @Success 200 {object} ResponseMessage
-// @Failure 500 {object} ResponseMessage
-// @Router /todo/{status}/{title} [PUT]
+//
+//	@Description	更新一条标题为title的记录，状态改为status
+//	@Summary		更新一条记录
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			status			path	int		true	"修改状态"
+//	@Param			title			path	string	true	"被更新记录的标题"
+//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
+//	@Success		200				"{object} ResponseMessage"
+//	@Failure		500				"{object} ResponseMessage"
+//	@Router			/todo/{title} [PUT]
 func UpdateByOneKey(ctx *gin.Context) {
-	var note3 Model.Note
+	var note3 *Model.Note
 	var data Model.Data
 	title := ctx.Param("title")
-	status := ctx.Param("status")
-
+	status, ok := ctx.GetQuery("status")
+	if !ok {
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": 500,
+			"data":   Model.Data{},
+			"msg":    "修改失败,请输入修改状态",
+			"err":    "修改失败,请输入修改状态",
+		})
+		return
+	}
 	status1, _ := strconv.Atoi(status)
 	d := Model.Db1.Where("title=?", title).First(&note3)
 	if d.RowsAffected == 0 {
@@ -284,7 +305,7 @@ func UpdateByOneKey(ctx *gin.Context) {
 			"status": 500,
 			"data":   Model.Data{},
 			"msg":    "修改失败，该条记录不存在",
-			"error":  d.Error,
+			"err":    "修改失败，该条记录不存在",
 		})
 		return
 	}
@@ -316,17 +337,18 @@ func UpdateByOneKey(ctx *gin.Context) {
 }
 
 // UpdateAll
-// @Description 更新记录
-// @Summary 更新所有未完成或已完成记录的完成状态
-// @Accept query
-// @Produce application/json
-// @Param status query int false "完成状态"
-// @Param Authorization header string false "Bearer 用户令牌"
-// @Success 200 {object} ResponseMessage
-// @Failure 500 {object} ResponseMessage
-// @Router /todo [PUT]
+//
+//	@Description	更新记录
+//	@Summary		更新所有未完成或已完成记录的完成状态
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			status			query	int		false	"完成状态"
+//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
+//	@Success		200				"{object} ResponseMessage"
+//	@Failure		500				"{object} ResponseMessage"
+//	@Router			/todo [PUT]
 func UpdateAll(ctx *gin.Context) {
-	var note3 []Model.Note
+	var note3 []*Model.Note
 	var data Model.Data
 	status, ok := ctx.GetQuery("status") //  /todo?status=
 	if !ok {
@@ -346,7 +368,7 @@ func UpdateAll(ctx *gin.Context) {
 			"status": 500,
 			"data":   Model.Data{},
 			"msg":    "修改失败，无记录",
-			"error":  d.Error,
+			"err":    "修改失败，无记录",
 		})
 		return
 	}
@@ -364,7 +386,7 @@ func UpdateAll(ctx *gin.Context) {
 			"status": 500,
 			"data":   Model.Data{},
 			"msg":    "修改发生错误1",
-			"error":  d2.Error,
+			"err":    "修改发生错误1",
 		})
 		return
 	}
@@ -381,17 +403,18 @@ func UpdateAll(ctx *gin.Context) {
 }
 
 // DeleteByKey
-// @Description 删除标题为title的记录
-// @Summary 删除一条记录
-// @Accept path
-// @Produce application/json
-// @Param title path string true "被删除记录的标题"
-// @Param Authorization header string false "Bearer 用户令牌"
-// @Success 200 {object} ResponseMessage
-// @Failure 500 {object} ResponseMessage
-// @Router /todo/{title} [DELETE]
+//
+//	@Description	删除标题为title的记录
+//	@Summary		删除一条记录
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			title			path	string	true	"被删除记录的标题"
+//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
+//	@Success		200				"{object} ResponseMessage"
+//	@Failure		500				"{object} ResponseMessage"
+//	@Router			/todo/{title} [DELETE]
 func DeleteByKey(ctx *gin.Context) {
-	var note4 Model.Note
+	var note4 *Model.Note
 	var data Model.Data
 	title := ctx.Param("title")
 
@@ -426,17 +449,18 @@ func DeleteByKey(ctx *gin.Context) {
 }
 
 // DeleteAll
-// @Description 删除记录
-// @Summary 删除所有/已完成/未完成记录
-// @Accept query
-// @Produce application/json
-// @Param status query int false "完成状态"
-// @Param Authorization header string false "Bearer 用户令牌"
-// @Success 200 {object} ResponseMessage
-// @Failure 500 {object} ResponseMessage
-// @Router /todo [DELETE]
+//
+//	@Description	删除记录
+//	@Summary		删除所有/已完成/未完成记录
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			status			query	int		false	"完成状态"
+//	@Param			Authorization	header	string	false	"Bearer 用户令牌"
+//	@Success		200				"{object} ResponseMessage"
+//	@Failure		500				"{object} ResponseMessage"
+//	@Router			/todo [DELETE]
 func DeleteAll(ctx *gin.Context) {
-	var note5 []Model.Note
+	var note5 []*Model.Note
 	var data Model.Data
 	status, ok := ctx.GetQuery("status")
 
@@ -448,7 +472,7 @@ func DeleteAll(ctx *gin.Context) {
 				"status": 500,
 				"data":   Model.Data{},
 				"msg":    "删除失败，无记录存在",
-				"error":  db2.Error,
+				"err":    "删除失败，无记录存在",
 			})
 			return
 		}
@@ -458,7 +482,7 @@ func DeleteAll(ctx *gin.Context) {
 				"status": 500,
 				"data":   data,
 				"msg":    "删除错误",
-				"error":  d.Error,
+				"err":    "删除错误",
 			})
 			return
 		}
@@ -469,7 +493,7 @@ func DeleteAll(ctx *gin.Context) {
 			"status": http.StatusOK,
 			"data":   data,
 			"msg":    "删除成功",
-			"error":  d.Error,
+			"err":    "删除成功",
 		})
 
 	} else {
@@ -480,7 +504,7 @@ func DeleteAll(ctx *gin.Context) {
 				"status": 500,
 				"data":   Model.Data{},
 				"msg":    "删除失败，无记录存在",
-				"error":  db2.Error,
+				"err":    "删除失败，无记录存在",
 			})
 			return
 		}
@@ -490,7 +514,7 @@ func DeleteAll(ctx *gin.Context) {
 				"status": 500,
 				"data":   data,
 				"msg":    "删除错误",
-				"error":  d.Error,
+				"err":    "删除错误",
 			})
 			return
 		}
@@ -500,7 +524,7 @@ func DeleteAll(ctx *gin.Context) {
 			"status": http.StatusOK,
 			"data":   data,
 			"msg":    "删除成功",
-			"error":  d.Error,
+			"err":    "",
 		})
 	}
 }

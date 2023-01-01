@@ -1,24 +1,24 @@
 package main
 
-// @title Go-NOTE
-// @version 1.0
-// @description Golang work.
-// @termsOfService http://swagger.io/terms/
+//	@title			Go-NOTE
+//	@version		1.0
+//	@description	Golang work.
+//	@termsOfService	http://swagger.io/terms/
 
-// @contact.name zhangxin
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
+//	@contact.name	zhangxin
+//	@contact.url	http://www.swagger.io/support
+//	@contact.email	support@swagger.io
 
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+//	@license.name	Apache 2.0
+//	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host 127.0.0.1:8080
-// @BasePath /api/v1
+//	@host		127.0.0.1:8880
+//	@BasePath	/api/v1
 
 import (
-	Model "gin01/Models"
+	Model "NoteGin/Models"
 
-	router "gin01/Router"
+	router "NoteGin/Router"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -46,5 +46,5 @@ func main() {
 	defer Model.Db1.Close()
 	Model.Db1.AutoMigrate(&Model.User{}, &Model.Note{})
 	engine := router.Router()
-	engine.Run()
+	engine.Run(":8880")
 }
